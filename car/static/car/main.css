@@ -39,7 +39,9 @@ ul {
 .article-title {
   color: #444444;
 }
-
+#logo, .pull-left{
+    float: left;
+}
 a.article-title:hover {
   color: #428bca;
   text-decoration: none;
