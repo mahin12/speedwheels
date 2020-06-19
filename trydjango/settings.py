@@ -26,6 +26,7 @@ SECRET_KEY = 't1g4@77t^&^yg(unb)r1^uwa=-jg47j#q8ya23&ro8dckt!56!'
 
 ALLOWED_HOSTS = ['*', "speeeeedwheels.herokuapp.com"]
 DEBUG = False
+DEBUG_PROPAGATE_EXCEPTIONS = True
 
 # Application definition
 
