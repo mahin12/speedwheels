@@ -1,0 +1,402 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'car/main.css' %}">
+    <!-- styling rapid -->
+
+    <link href="{% static 'lib/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <!-- Favicons -->
+    <link href="{% static 'img/favicon.png' %}" rel="icon">
+    <link href="{% static 'img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Raleway:300,400,500,700,800"
+          rel="stylesheet">
+
+    <!-- Bootstrap CSS File -->
+    <link href="{% static 'lib/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Libraries CSS Files -->
+    <link href="{% static 'lib/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/animate/animate.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/venobox/venobox.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+
+    <!-- Main Stylesheet File -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+    {% if title %}
+        <title>Django Car - {{ title }}</title>
+    {% else %}
+        <title>Django Car</title>
+    {% endif %}
+</head>
+
+<body>
+
+<header id="header" class="header-scrolled">
+    <div class="container">
+
+        <div id="logo" class="pull-left">
+            <a class="navbar-brand mr-4" href="{% url 'car-home' %}">Speedwheels</a>
+        </div>
+
+        <nav id="nav-menu-container">
+            <ul class="nav-menu">
+                <li class="menu-active"><a class="nav-item nav-link" href="{% url 'car-home' %}">Home</a></li>
+                <li><a class="nav-item nav-link" href="{% url 'car-about' %}">About</a></li>
+                <li><a class="nav-item nav-link" href="{% url 'car-gallery' %}">Gallery</a></li>
+                <li><a class="nav-item nav-link" href="{% url 'car-contact' %}">Contact</a></li>
+                <li><a class="nav-item nav-link" href="{% url 'car-carlist' %}">Book a car</a></li>
+                <li><a class="nav-item nav-link" href="{% url 'shop_review' %}">Shop Review</a></li>
+                <li><a class="nav-item nav-link" href="{% url 'report' %}">Report</a></li>
+
+                {% if user.is_authenticated %}
+                    <li class="buy-tickets"><a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a></li>
+                    <li><a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a></li>
+                {% else %}
+                    <li><a class="nav-item nav-link" href="{% url 'login' %}">Login</a></li>
+                    <li class="buy-tickets"><a class="nav-item nav-link" href="{% url 'register' %}">Register</a></li>
+                {% endif %}
+
+            </ul>
+        </nav><!-- #nav-menu-container -->
+    </div>
+</header>
+
+<main role="main" class="container" style="padding-top: 100px">
+    <div class="row">
+        <div class="col-md-12">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</main>
+
+<div>
+
+<style>
+body {
+  font-family: Arial;
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+img {
+  vertical-align: middle;
+}
+
+/* Position the image container (needed to position the left and right arrows) */
+.container {
+  position: relative;
+}
+
+/* Hide the images by default */
+.mySlides {
+  display: none;
+}
+
+/* Add a pointer when hovering over the thumbnail images */
+.cursor {
+  cursor: pointer;
+}
+
+/* Next & previous buttons */
+.prev,
+.next {
+  cursor: pointer;
+  position: absolute;
+  top: 40%;
+  width: auto;
+  padding: 16px;
+  margin-top: -50px;
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Position the "next button" to the right */
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover,
+.next:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Number text (1/3 etc) */
+.numbertext {
+  color: #f2f2f2;
+  font-size: 12px;
+  padding: 8px 12px;
+  position: absolute;
+  top: 0;
+}
+
+/* Container for image text */
+.caption-container {
+  text-align: center;
+  background-color: #222;
+  padding: 2px 16px;
+  color: white;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Six columns side by side */
+.column {
+  float: left;
+  width: 16.66%;
+}
+
+/* Add a transparency effect for thumnbail images */
+.demo {
+  opacity: 0.6;
+}
+
+.active,
+.demo:hover {
+  opacity: 1;
+}
+</style>
+<body>
+
+<h2 style="text-align:center; color: white">Check the cars we have for you</h2>
+
+<div class="container">
+  <div class="mySlides">
+    <div class="numbertext">1 / 6</div>
+    <img src="https://m.hondacarindia.com/content/mobile/images/home_banner/honda-city.jpg" style="width:100%">
+  </div>
+
+  <div class="mySlides">
+    <div class="numbertext">2 / 6</div>
+    <img src="https://m.hondacarindia.com/content/mobile/images/home_banner/allnewcrv.jpg" style="width:100%">
+  </div>
+
+  <div class="mySlides">
+    <div class="numbertext">3 / 6</div>
+    <img src="https://www.perodua.com.my/assets/images/01_mobile_Bezza_red.jpg" style="width:100%">
+  </div>
+
+  <div class="mySlides">
+    <div class="numbertext">4 / 6</div>
+    <img src="https://s1.cdn.autoevolution.com/images/gallery/Perodua-Myvi-5637_1.jpeg" style="width:100%">
+  </div>
+
+  <div class="mySlides">
+    <div class="numbertext">5 / 6</div>
+    <img src="https://imgcdn.zigwheels.my/medium/gallery/exterior/18/1527/perodua-alza-2018-front-angle-low-view-233300.jpg" style="width:100%">
+  </div>
+
+  <div class="mySlides">
+    <div class="numbertext">6 / 6</div>
+    <img src="https://assets.autobuzz.my/wp-content/uploads/2016/09/28183449/2016-Proton-SAGA-1.3L-VVT-Launch-5.jpg" style="width:100%">
+  </div>
+
+  <a class="prev" onclick="plusSlides(-1)">❮</a>
+  <a class="next" onclick="plusSlides(1)">❯</a>
+
+  <div class="caption-container">
+    <p id="caption"></p>
+  </div>
+
+  <div class="row">
+    <div class="column">
+      <img class="demo cursor" src="https://m.hondacarindia.com/content/mobile/images/home_banner/honda-city.jpg" style="width:100%" onclick="currentSlide(1)" alt="Honda City">
+    </div>
+    <div class="column">
+      <img class="demo cursor" src="https://m.hondacarindia.com/content/mobile/images/home_banner/allnewcrv.jpg" style="width:100%" onclick="currentSlide(2)" alt="Honda CRV">
+    </div>
+    <div class="column">
+      <img class="demo cursor" src="https://www.perodua.com.my/assets/images/01_mobile_Bezza_red.jpg" style="width:100%; height: 157px" onclick="currentSlide(3)" alt="Perodua Bezza">
+    </div>
+    <div class="column">
+      <img class="demo cursor" src="https://s1.cdn.autoevolution.com/images/gallery/Perodua-Myvi-5637_1.jpeg" style="width:100%; height: 157px" onclick="currentSlide(4)" alt="Perodua Myvi">
+    </div>
+    <div class="column">
+      <img class="demo cursor" src="https://imgcdn.zigwheels.my/medium/gallery/exterior/18/1527/perodua-alza-2018-front-angle-low-view-233300.jpg" style="width:100%; height: 157px" onclick="currentSlide(5)" alt="Perodua Alza">
+    </div>
+    <div class="column">
+      <img class="demo cursor" src="https://assets.autobuzz.my/wp-content/uploads/2016/09/28183449/2016-Proton-SAGA-1.3L-VVT-Launch-5.jpg" style="width:100%; height: 157px" onclick="currentSlide(6)" alt="Proton Saga">
+    </div>
+  </div>
+</div>
+
+<script>
+var slideIndex = 1;
+showSlides(slideIndex);
+
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
+
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+  var i;
+  var slides = document.getElementsByClassName("mySlides");
+  var dots = document.getElementsByClassName("demo");
+  var captionText = document.getElementById("caption");
+  if (n > slides.length) {slideIndex = 1}
+  if (n < 1) {slideIndex = slides.length}
+  for (i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";
+  }
+  for (i = 0; i < dots.length; i++) {
+      dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex-1].style.display = "block";
+  dots[slideIndex-1].className += " active";
+  captionText.innerHTML = dots[slideIndex-1].alt;
+}
+</script>
+
+</body>
+
+
+</div>
+
+<!--==========================
+Footer
+============================-->
+<footer id="footer">
+    <div class="footer-top">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-lg-4 col-md-6 footer-info">
+                    <img src="{% static 'img/logo.png' %}" alt="Speedwheels">
+                    <a class="navbar-brand mr-4" href="{% url 'car-home' %}">Speedwheels</a>
+
+                    <p>we know that our customers have a wide variety of needs from the purely practical to the
+                        downright intrepid. Speedwheels goes the extra mile to offer a wide range of vehicles to suit
+                        your needs. Our fleet is comprised of a wide range of vehicles, to suit needs from a small car
+                        for efficient trips across town or an executive saloon for you to leave a lasting
+                        impression.</p>
+                </div>
+
+                <div class="col-lg-4 col-md-6 footer-links">
+                    <h4>Useful Links</h4>
+                    <ul>
+                        <li><i class="fa fa-angle-right"></i> <a href="#">Home</a></li>
+                        <li><i class="fa fa-angle-right"></i> <a href="#">About us</a></li>
+                        <li><i class="fa fa-angle-right"></i> <a href="#">Services</a></li>
+                        <li><i class="fa fa-angle-right"></i> <a href="#">Terms of service</a></li>
+                        <li><i class="fa fa-angle-right"></i> <a href="#">Privacy policy</a></li>
+                    </ul>
+                </div>
+
+
+                <div class="col-lg-4 col-md-6 footer-contact">
+                    <h4>Contact Us</h4>
+                    <p>
+                        Nexus Bangsar <br>
+                        Bangsar South, KL 59200<br>
+                        Malaysia <br>
+                        <strong>Phone:</strong> +60182114322<br>
+                        <strong>Email:</strong> speedwheels_info@gmail.com<br>
+                    </p>
+
+                    <div class="social-links">
+                        <a href="#" class="twitter"><i class="fa fa-twitter"></i></a>
+                        <a href="#" class="facebook"><i class="fa fa-facebook"></i></a>
+                        <a href="https://www.instagram.com/speedwheels_um/" class="instagram"><i
+                                class="fa fa-instagram"></i></a>
+                        <a href="#" class="google-plus"><i class="fa fa-google-plus"></i></a>
+                        <a href="#" class="linkedin"><i class="fa fa-linkedin"></i></a>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="copyright">
+            &copy; Copyright <strong>Speedwheels</strong>. All Rights Reserved
+        </div>
+        <div class="credits">
+            <!--
+              All the links in the footer should remain intact.
+              You can delete the links only if you purchased the pro version.
+              Licensing information: https://bootstrapmade.com/license/
+              Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=TheEvent
+            -->
+            Designed by <a>Md Mahin Arafat</a>
+        </div>
+    </div>
+</footer><!-- #footer -->
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+{% block scripts %}{% endblock %}
+</body>
+</html>
+
+<!--*****************************new*****************************-->
+
+<script>
+    function searchFunction() {
+        // Declare variables
+        var input, filter, ul, li, a, i, txtValue;
+        input = document.getElementById('searchcars');
+        filter = input.value.toUpperCase();
+        ul = document.getElementById("carUL");
+        li = ul.getElementsByTagName('li');
+
+        // Loop through all list items, and hide those who don't match the search query
+        for (i = 0; i < li.length; i++) {
+            a = li[i].getElementsByTagName("a")[0];
+            txtValue = a.textContent || a.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                li[i].style.display = "";
+            } else {
+                li[i].style.display = "none";
+            }
+        }
+    }
+</script>
+
+

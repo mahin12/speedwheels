@@ -1,0 +1,45 @@
+<section id="carlist">
+    {% extends "car/base.html" %}
+    {% load check_reserved %}
+    {% block content %}
+        <input type="text" id="searchcars" onkeyup="searchFunction()" placeholder="Search for cars..">
+
+        <ul id="carUL">
+
+            {% for car in cars %}
+                <li class="car-list">
+                    {% check_reserved car.id as is_reserved %}
+                    {% if is_reserved %}
+                        <a href="#">
+                    {% else %}
+                        <a href="{% url 'reserve' car.id %}">
+                    {% endif %}
+                    <br>
+                    {% if car.image %}
+                        <img width="20%" src="{{ car.image.url }}" alt="">
+                    {% else %}
+                        <img width="20%"
+                             src="https://static.businessinsider.sg/2017/12/12/592f4169b74af41b008b5977.png" alt="">
+                    {% endif %}
+                    <h2>{{ car.title }} (RM {{ car.price }}/h)</h2>
+                    <p>{{ car.description }}</p><br>
+                    {% if is_reserved %}
+                        <button class="btn btn-success" onclick="javascript(0)">Reserved</button>
+                    {% else %}
+                        <input class="btn btn-outline-info" type="submit" value="Reserve">
+                    {% endif %}
+                    <a href="{% url 'detail' car.id %}" class='btn btn-primary'>Details</a>
+                    
+                </li>
+            {% endfor %}
+
+        </ul>
+
+    {% endblock content %}
+</section>
+
+
+
+
+
+

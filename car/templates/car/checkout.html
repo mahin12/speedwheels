@@ -1,0 +1,50 @@
+<section id="about">
+    {% extends "car/base.html" %}
+    {% load crispy_forms_tags %}
+    {% block content %}
+        <h4 class="col-md-6 mx-auto" style="color: white">Speedwheels car booking checkout</h4>
+        <h4 class="col-md-6 mx-auto" style="color: white">Total hours: {{ hours }}, Price per hour: ${{ product.price|default:0 }}</h4>
+
+        <div class='col-md-6 mx-auto'>
+            <form accept-charset="UTF-8" action="{% url 'pay' %}" class="require-validation" id="payment-form"
+                  method="post">
+                {% csrf_token %}
+                <div class='form-group'>
+                    <label class='control-label'>Name on Card</label>
+                    <input class='form-control' type='text' required>
+                </div>
+                <div class='form-group'>
+                    <label class='control-label'>Card Number</label>
+                    <input autocomplete='off' name="card_number" required class='form-control card-number' maxlength='5' type='text'>
+                </div>
+                <div class='row'>
+                    <div class='col-md-4'>
+                        <label class='control-label'>CVC</label>
+                        <input autocomplete='off' required class='form-control card-cvc' placeholder='ex. 311' maxlength='4'
+                               type='text'>
+                    </div>
+                    <div class='col-md-4'>
+                        <label class='control-label'>Expiration</label>
+                        <input class='form-control card-expiry-month' required placeholder='MM' maxlength='2' type='text'>
+                    </div>
+                    <div class='col-md-4 form-group'>
+                        <label class='control-label'> </label>
+                        <input class='form-control card-expiry-year' required placeholder='YYYY' maxlength='4' type='text'>
+                    </div>
+                </div>
+                <div class='row'>
+                    <div class='col-md-6'>
+                        <div class='form-control total btn btn-info'>
+                            Total:
+                            <span class='amount'>${{ total }}</span>
+                        </div>
+                    </div>
+                    <div class='col-md-6 form-group'>
+                        <button {% if total == 0 %} disabled {% endif %}  class='form-control btn btn-primary submit-button' type='submit'>Pay »</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    {% endblock content %}
+</section>

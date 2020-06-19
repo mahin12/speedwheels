@@ -1,0 +1,72 @@
+<section id="about">
+    {% extends "car/base.html" %}
+    {% load crispy_forms_tags %}
+    {% block content %}
+        <h4 style="color: white">Speedwheels car booking</h4>
+        <div class="content-section">
+            {% if form.errors %}
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <div class="alert alert-danger">
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+                {#                <fieldset class="form-group">#}
+                {#                    {{ form|crispy }}#}
+                {#                </fieldset>#}
+
+                <div class="form-group">
+                    <label style="color:black;">Name</label>
+                    <input type="text" name="name" class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput"
+                           placeholder="Full Name"><br>
+
+                    <label style="color:black;">Email address</label>
+                    <input type="email" name="email" class="form-control" id="exampleInputEmail1"
+                           aria-describedby="emailHelp"
+                           placeholder="Enter email">
+                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
+                        else.</small><br>
+
+                    <label style="color:black;">Phone</label>
+                    <input class="form-control" name="phone" type="tel" placeholder="1-(555)-555-5555" id="phone-input"><br>
+
+                    <label style="color:black;">Address</label>
+                    <input class="form-control" name="address" placeholder="Street address" id="Street_address"><br>
+                    <input class="form-control" name="address2" placeholder="Street address line 2"
+                           id="Street_address_line_2"><br>
+                    <input class="form-control" name="city" placeholder="City" id="City"><br>
+                    <input class="form-control" name="region" placeholder="Region" id="Region"><br>
+                    <input class="form-control" name="postal_zip" placeholder="Postal/Zip code"
+                           id="Postal/Zip code"><br>
+                    <input class="form-control" name="country" placeholder="Country" id="Country"><br>
+
+                    <label style="color: black">Rent from this: Date and time</label>
+                    <input class="form-control" name="rent_from" type="datetime-local" placeholder="2011-08-19T13:45:00"
+                           id="example-datetime-local-input"><br>
+
+                    <label style="color: black">Until this: Date and time</label>
+                    <input class="form-control" name="rent_to" type="datetime-local" placeholder="2011-08-19T13:45:00"
+                           id="example-datetime-local-input"><br>
+
+                    <label style="color: black">Notes</label>
+                    <textarea class="form-control" name="note" id="BookingTextarea" rows="3"></textarea><br>
+
+                    <input class="btn btn-outline-info" type="submit" value="Reserve">
+
+                </div>
+
+            </form>
+        </div>
+
+    {% endblock content %}
+</section>

@@ -1,0 +1,135 @@
+<section id="about">
+  {% extends "car/base.html" %} {% block content %}
+  <style>
+    .rating {
+      display: flex;
+      flex-direction: row-reverse;
+    }
+
+    .rating > input {
+      display: none;
+    }
+
+    .rating > label {
+      position: relative;
+      width: 1em;
+      font-size: 30px;
+      color: #ffd600;
+      cursor: pointer;
+    }
+
+    .rating > label::before {
+      content: "\2605";
+      position: absolute;
+      opacity: 0;
+    }
+
+    .rating > label:hover:before,
+    .rating > label:hover ~ label:before {
+      opacity: 1 !important;
+    }
+
+    .rating > input:checked ~ label:before {
+      opacity: 1;
+    }
+
+    .rating:hover > input:checked ~ label:before {
+      opacity: 0.4;
+    }
+  </style>
+  <div onload="test()">
+    <p style="font-size: 40px;">Car details</p>
+    <img src="{{ info.image.url }}" width="180px" height="120px" alt="" />
+    <p style="font-size: 30px;">{{info.title}}</p>
+    <p>Rating: {{info.avg_rating|floatformat:2}}</p>
+    <p>{{info.description}}</p>
+    <hr />
+    <form action="" method="post">
+      {% csrf_token %}
+      <input id="ratings-hidden" name="rating" type="hidden" />
+      <textarea
+        class="form-control animated"
+        cols="10"
+        id="new-review"
+        name="review"
+        placeholder="Enter your review here..."
+        rows="5"
+      ></textarea>
+
+      <div class="text-left" style="margin-top: 5px;">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="rating">
+              <input type="radio" name="rating" value="5" id="5" /><label
+                for="5"
+                >☆</label
+              >
+              <input type="radio" name="rating" value="4" id="4" /><label
+                for="4"
+                >☆</label
+              >
+              <input type="radio" name="rating" value="3" id="3" /><label
+                for="3"
+                >☆</label
+              >
+              <input type="radio" name="rating" value="2" id="2" /><label
+                for="2"
+                >☆</label
+              >
+              <input type="radio" name="rating" value="1" id="1" /><label
+                for="1"
+                >☆</label
+              >
+            </div>
+          </div>
+        </div>
+        <!-- <input type="text" name="rating" placeholder="Rate between 1 to 5" /> -->
+      </div>
+      <div class="text-right">
+        <button class="btn btn-success btn-sm" type="submit">
+          Leave a review
+        </button>
+      </div>
+    </form>
+    {% if msg %}
+    <div class="alert alert-success" role='alert'>
+        <strong>Success!</strong> Thanks for your review.
+    </div>
+    {%endif%}
+
+    {% if reviews %}
+    <p style="font-size: 40px; margin-top: 20px;">Reviews</p>
+    {% endif %} {% for review in reviews %}
+    <p>{{review.description}} ( Rating - {{review.rating}}) - by <i>{{review.user}}</i></p> 
+    <br />
+    {% endfor %}
+  </div>
+
+  {% endblock content %} {% block javascript %}
+  <!-- <script>
+    console.log("bal");
+    var $star_rating = $(".star-rating .fa");
+
+    var SetRatingStar = function () {
+      return $star_rating.each(function () {
+        if (
+          parseInt($star_rating.siblings("input.rating-value").val()) >=
+          parseInt($(this).data("rating"))
+        ) {
+          return $(this).removeClass("fa-star-o").addClass("fa-star");
+        } else {
+          return $(this).removeClass("fa-star").addClass("fa-star-o");
+        }
+      });
+    };
+
+    $star_rating.on("click", function () {
+      $star_rating.siblings("input.rating-value").val($(this).data("rating"));
+      return SetRatingStar();
+    });
+
+    SetRatingStar();
+    $(document).ready(function () {});
+  </script> -->
+  {% endblock %}
+</section>

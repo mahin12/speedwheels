@@ -1,0 +1,243 @@
+<section id="about">
+    {% extends "car/base.html" %}
+    {% load crispy_forms_tags %}
+    {% block content %}
+        <style>
+            #map {
+                height: 500px;
+                margin: 10px auto;
+                width: 800px;
+            }
+        </style>
+        <h4 style="color: white">Speedwheels car booking</h4>
+        <div class="content-section">
+
+            {% if form.errors %}
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <div class="alert alert-danger">
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+                {#                <fieldset class="form-group">#}
+                {#                    {{ form|crispy }}#}
+                {#                </fieldset>#}
+
+                <div class="form-group">
+
+                    <label style="color: black">Reporting Date and time</label>
+                    <input class="form-control" name="report_time" required type="datetime-local"
+                           id="example-datetime-local-input"><br>
+
+                    <label style="color: black">Incident Date and time</label>
+                    <input class="form-control" name="incident_time" required type="datetime-local"
+                           id="example-datetime-local-input"><br>
+
+                    <label style="color: black">Car number and details</label>
+                    <textarea class="form-control" name="car_details" required id="CarNumTextarea"
+                              rows="3"></textarea><br>
+
+                    <label style="color: black">Incident report Issued by:</label>
+                    <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" required name="issued_by"
+                           id="inlineFormInput"
+                           placeholder="Full Name"><br>
+
+                    <label style="color: black">Incident location details</label>
+                    <textarea class="form-control" id="LocationTextarea" required name="location"
+                              rows="3"></textarea><br>
+
+                    <label style="color: black">Incident nature</label>
+                    <textarea class="form-control" id="IncidentNatureTextarea" required name="nature"
+                              rows="3"></textarea><br>
+
+                    <label style="color: black">Incident details</label>
+                    <textarea class="form-control" id="IncidentNatureTextarea" required name="incident_details"
+                              rows="3"></textarea><br>
+
+                    <label style="color: black">Shop name:</label>
+                    <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" required name="shop_name"
+                           id="inlineFormInput"
+                           placeholder="Shop Name"><br>
+
+                    <label style="color: black">Shop phone number:</label>
+                    <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" required name="shop_number"
+                           id="inlineFormInput"
+                           placeholder="Shop phone number"><br>
+
+                </div>
+
+                <div>
+
+                    <button id="map_div" class="btn btn-primary">Share Location</button>
+
+                    <div id="map" style="display: none"></div>
+                    <p id="map_help" style="display: none" class="text-black-50 mt-3"></p>
+
+                </div>
+
+                <input class="btn btn-outline-info mt-3" type="submit" value="Submit">
+
+            </form>
+        </div>
+
+    {% endblock content %}
+</section>
+
+{% block scripts %}
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB0a4qhtWHW8GdpwuhheDOg9EngsvNf2Us&libraries=places"
+            async
+            defer></script>
+
+    <script>
+        let x = document.getElementById("map");
+
+        $("#map_div").click(function (e) {
+            e.preventDefault();
+
+            initMap();
+        });
+
+        var map;
+        var infowindow;
+        var service;
+
+        function initMap() {
+            // Create the map.
+            navigator.geolocation.watchPosition(function (position) {
+                },
+                function (error) {
+                    if (error.code == error.PERMISSION_DENIED) {
+                        document.getElementById("map_help").style.display = "block";
+                        document.getElementById("map_help").innerHTML = "Geolocation is not supported by this browser.";
+                        return;
+                    }
+                });
+            if (navigator.geolocation) {
+                try {
+                    navigator.geolocation.getCurrentPosition(function (position) {
+                        var pyrmont = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+
+                        x.style.display = "block";
+
+                        map = new google.maps.Map(document.getElementById('map'), {
+                            center: pyrmont,
+                            zoom: 14
+                        });
+
+                        // Show current location first
+                        var myloc = new google.maps.Marker({
+                            clickable: false,
+                            icon: new google.maps.MarkerImage('//maps.gstatic.com/mapfiles/mobile/mobileimgs2.png',
+                                new google.maps.Size(22, 22),
+                                new google.maps.Point(0, 18),
+                                new google.maps.Point(11, 11)),
+                            shadow: null,
+                            zIndex: 999,
+                            map: map
+                        });
+
+                        var me = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                        myloc.setPosition(me);
+
+                        // Create the places service.
+                        service = new google.maps.places.PlacesService(map);
+                        infowindow = new google.maps.InfoWindow();
+
+                        // Perform a nearby search.
+                        service.nearbySearch({
+                                location: pyrmont,
+                                radius: 5000,
+                                type: ['car_repair']
+                            },
+                            function (results, status, pagination) {
+                                if (status !== 'OK') return;
+
+                                createMarkers(results);
+                                getNextPage = pagination.hasNextPage && function () {
+                                    pagination.nextPage();
+                                };
+                            });
+                    });
+                } catch (err) {
+                    document.getElementById("map_help").style.display = "block";
+                    document.getElementById("map_help").innerHTML = "Geolocation is not supported by this browser.";
+                    return;
+                }
+            } else {
+                document.getElementById("map_help").style.display = "block";
+                document.getElementById("map_help").innerHTML = "Geolocation is not supported by this browser.";
+                return;
+            }
+        }
+
+        function createMarkers(places) {
+            var bounds = new google.maps.LatLngBounds();
+            for (var i = 0, place; place = places[i]; i++) {
+                var image = {
+                    url: place.icon,
+                    size: new google.maps.Size(71, 71),
+                    origin: new google.maps.Point(0, 0),
+                    anchor: new google.maps.Point(17, 34),
+                    scaledSize: new google.maps.Size(25, 25)
+                };
+
+                var marker = new google.maps.Marker({
+                    map: map,
+                    icon: image,
+                    title: place.name,
+                    position: place.geometry.location
+                });
+                bounds.extend(place.geometry.location);
+
+                {% comment %}service.getDetails(request, function (details, status) {
+                    console.log(details);
+                    google.maps.event.addListener(marker, 'click', function () {
+                        infowindow.setContent(details.name + "<br />" + details.formatted_address + "<br />" + details.website + "<br />" + details.rating + "<br />" + details.formatted_phone_number);
+                        infowindow.open(map, this);
+                    });
+
+                    {% comment %}google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                        return function () {
+                            var popupString = '<div>Name: <p class="text-primary">' + places[i].name + '</p>' +
+                                'Address: <p class="text-primary">' + details.vicinity + '</p>' +
+                                'Phone: <p class="text-primary">' + details.formatted_phone_number + '</p>' +
+                                '</div>';
+                            infowindow.setContent(popupString);
+                            infowindow.open(map, marker);
+                        }
+                    })(marker, i));
+                });{% endcomment %}
+
+                google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                    return function () {
+                        var request = {placeId: places[i].place_id};
+                        service.getDetails(request, function (details, status) {
+                            var popupString = '<div>Name: <p class="text-primary">' + places[i].name + '</p>' +
+                                'Address: <p class="text-primary">' + details.vicinity + '</p>' +
+                                'Phone: <p class="text-primary">' + details.formatted_phone_number + '</p>' +
+                                '</div>';
+                            infowindow.setContent(popupString);
+                            infowindow.open(map, marker);
+                        });
+                    }
+                })(marker, i));
+            }
+            map.fitBounds(bounds);
+        }
+    </script>
+
+{% endblock %}
